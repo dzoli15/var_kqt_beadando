@@ -3,8 +3,8 @@
 <package format="3">
   <name>var_kqt_beadando</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="todo@todo.com">TODO:</maintainer>
+  <description>This is my assignment for the subject.</description>
+  <maintainer email="dzoli0915@gmail.com">Varga Zoltán</maintainer>
   <license>GNU General Public License v3.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
