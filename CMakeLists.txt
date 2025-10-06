@@ -1,34 +1,39 @@
 cmake_minimum_required(VERSION 3.8)
 project(var_kqt_beadando)
 
-# Default to C++14
-if(NOT CMAKE_CXX_STANDARD)
-set(CMAKE_CXX_STANDARD 14)
-endif()
-
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+# find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
 
-set(ament_dependencies
-  rclcpp
-  std_msgs
-  geometry_msgs
+# Add speed_sensor_node executable
+add_executable(speed_sensor_node src/speed_sensor_node.cpp)
+ament_target_dependencies(speed_sensor_node rclcpp std_msgs)
+
+# Add cruise_control_node executable
+add_executable(cruise_control_node src/cruise_control_node.cpp)
+ament_target_dependencies(cruise_control_node rclcpp std_msgs)
+
+# Install targets
+install(TARGETS
+  speed_sensor_node
+  cruise_control_node
+  DESTINATION lib/${PROJECT_NAME}
 )
 
-# add_executable(simple_sub_node src/print_pose.cpp)
-# ament_target_dependencies(simple_sub_node ${ament_dependencies} )
+# Install launch files
+install(
+  DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
+)
 
-install(DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME})
-
-install(TARGETS
-# simple_sub_node
-DESTINATION lib/${PROJECT_NAME})
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+endif()
 
 ament_package()
