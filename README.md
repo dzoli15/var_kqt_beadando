@@ -25,7 +25,7 @@ A projekt egy klasszikus **zárt szabályozási kört (closed-loop)** valósít 
 1.  `cruise_control_node` (Az "Agy")
     * Feliratkozik a felhasználó által beállított `/target_speed`-re és a jármű által közölt `/current_speed`-re.
     * Kiszámolja a sebességkülönbséget (`hiba`).
-    * A hiba alapján egy arányos parancsot generál, amit a `[1, 5]`-ös abszolút értékű tartományba korlátoz.
+    * A hiba alapján egy arányos parancsot generál, amit a `[1, 5]`-ös abszolút értékű tartományba korlátoz 30%-os eltérés engedménnyel.
     * A korlátozott, egész számos parancsot a `/speed_change_command` topicon publikálja.
 
 2.  `speed_sensor_node` (A "Jármű")
@@ -73,6 +73,9 @@ Navigálj a ROS 2 workspace gyökerébe és fordítsd le a csomagot.
 
 ```bash
 cd ~/ros2_ws
+```
+
+```bash
 colcon build --packages-select var_kqt_beadando
 ```
 
@@ -82,21 +85,25 @@ Egy új terminálban "source"-old a workspace-t, majd indítsd el a rendszert a 
 
 ```bash
 source ~/ros2_ws/install/setup.bash
+```
+
+```bash
 ros2 launch var_kqt_beadando tempomat.launch.py
 ```
+
 > **Várt kimenet:** A két node elindul, és másodpercenként megjelenik a státuszüzenet:
-> `[cruise_control_node]: Jármű sebessége: 0 km/h | Tempomat: 0 km/h | Változás mértéke: 0 km/h`
+> `[cruise_control_node]: Aktuális: 0 km/h | Tempomat: 0 km/h | Változás: 0 km/h`
 
 ### 3. Tempomat Kezelése
 
 Egy **másik terminálban** küldj parancsokat a tempomatnak. **Figyelem, a típus `std_msgs/msg/Int32`!**
 
 #### Célsebesség beállítása:
-```bash
 # Célsebesség 100 km/h
+```bash
 ros2 topic pub /target_speed std_msgs/msg/Int32 "{data: 100}"
 ```
-*Figyeld az első terminált! A jármű sebessége gyorsan, de maximum 5 km/h-s lépésekben fog nőni. Ahogy közeledik a célhoz, a lépésméret lecsökken, de sosem lesz 1-nél kevesebb, amíg el nem éri a 100-at.*
+*A jármű sebessége fél másodpercenként (0.5s) +/- 1-5 km/h-val fog változni a beállított tempomat érték függvényében. 30%-os túlgyorsulás avagy lassulás van megengedve a modellnek.*
 
 #### Tempomat kikapcsolása (lassítás nullára):
 ```bash
