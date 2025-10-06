@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>ros2_cpp_template</name>
+  <name>var_kqt_beadando</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="todo@todo.com">TODO:</maintainer>
+  <description>Kis beadandó AJR tantárgyhoz</description>
+  <maintainer email="dzoli0915@gmail.com"></maintainer>
   <license>GNU General Public License v3.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
